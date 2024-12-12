@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <style name="next_button">
+        <item name="android:background">@drawable/next_button</item>
+        <item name="android:layout_height">65dp</item>
+        <item name="android:layout_width">340dp</item>
+    </style>
+
+    <style name="input_field_layout">
+        <item name="android:layout_height">65dp</item>
+        <item name="android:layout_width">340dp</item>
+        <item name="android:textColorHint">#9E9E9E</item>
+    </style>
+
+    <style name="input_field_text">
+        <item name="android:background">@drawable/text_input_background</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_weight">1</item>
+    </style>
+</resources>
