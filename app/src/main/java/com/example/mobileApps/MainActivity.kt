@@ -5,8 +5,8 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import com.example.mobileApps.Fragments.FragmentA
-import com.example.mobileApps.Fragments.FragmentB
+import com.example.mobileApps.fragments.mainActivity.FragmentA
+import com.example.mobileApps.fragments.mainActivity.FragmentB
 import com.google.android.material.button.MaterialButton
 
 class MainActivity: AppCompatActivity() {
