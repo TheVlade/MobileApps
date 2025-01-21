@@ -1,19 +1,16 @@
 package com.example.mobileApps.fragments.list
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.ImageView
-import android.widget.TextView
-import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import com.example.mobileApps.R
 
 class ListAdapter(
-    private val items: List<ListItem>,
-    private val onItemClick: (ListItem) -> Unit,
-    private val onButtonClick: (ListItem, String) -> Unit
-) : RecyclerView.Adapter<ListAdapter.ListViewHolder>() {
+    private val onItemClick: (ListItem2) -> Unit,
+
+    private val onButtonClick: (ListItem2, String) -> Unit
+) : ListAdapter<ListItem2, ListViewHolder>(DIFF_CALLBACK) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListViewHolder {
         val view = LayoutInflater.from(parent.context)
@@ -22,28 +19,19 @@ class ListAdapter(
     }
 
     override fun onBindViewHolder(holder: ListViewHolder, position: Int) {
-        val item = items[position]
+        val item = getItem(position)
         holder.bind(item, onItemClick, onButtonClick)
     }
 
-    override fun getItemCount() = items.size
+    companion object {
+        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<ListItem2>() {
+            override fun areItemsTheSame(oldItem: ListItem2, newItem: ListItem2): Boolean {
+                return oldItem.id == newItem.id
+            }
 
-    class ListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val imageView: ImageView = itemView.findViewById(R.id.imageView)
-        private val titleTextView: TextView = itemView.findViewById(R.id.titleTextView)
-        private val likeButton: Button = itemView.findViewById(R.id.likeButton)
-        private val shareButton: Button = itemView.findViewById(R.id.shareButton)
-
-        fun bind(
-            item: ListItem,
-            onItemClick: (ListItem) -> Unit,
-            onButtonClick: (ListItem, String) -> Unit
-        ) {
-            imageView.setImageResource(item.imageResId)
-            titleTextView.text = item.title
-            itemView.setOnClickListener { onItemClick(item) }
-            likeButton.setOnClickListener { onButtonClick(item, "like") }
-            shareButton.setOnClickListener { onButtonClick(item, "share") }
+            override fun areContentsTheSame(oldItem: ListItem2, newItem: ListItem2): Boolean {
+                return oldItem == newItem
+            }
         }
     }
 }

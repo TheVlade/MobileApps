@@ -1,17 +1,23 @@
 package com.example.mobileApps.fragments.list
 
 import android.os.Bundle
-import android.util.Log
-import android.widget.Toast
-import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.appcompat.widget.SearchView
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.mobileApps.R
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 class ListFragment : Fragment() {
+
+    private val viewModel: ListViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -24,21 +30,35 @@ class ListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val recyclerView = view.findViewById<RecyclerView>(R.id.recyclerView)
-        val items = listOf(
-            ListItem(1, "ListItem 1", R.drawable.sample_image),
-            ListItem(2, "ListItem 2", R.drawable.sample_image),
-            ListItem(3, "ListItem 3", R.drawable.sample_image)
-        )
+        val searchView = view.findViewById<SearchView>(R.id.searchView)
 
-        val adapter = ListAdapter(items, { item ->
+        val adapter = ListAdapter({ item ->
             Toast.makeText(requireContext(), "Clicked item: ${item.id}", Toast.LENGTH_SHORT).show()
-            Log.d("com.example.mobileApps.fragments.list.ListFragment", "Clicked item: ${item.id}")
         }, { item, action ->
             Toast.makeText(requireContext(), "Clicked $action on item: ${item.id}", Toast.LENGTH_SHORT).show()
-            Log.d("com.example.mobileApps.fragments.list.ListFragment", "Clicked $action on item: ${item.id}")
         })
+
 
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
         recyclerView.adapter = adapter
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.items.collectLatest { items ->
+                adapter.submitList(items)
+            }
+        }
+
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                viewModel.searchItems(newText.orEmpty())
+                return true
+            }
+        })
+
+        viewModel.searchItems("")
     }
 }
