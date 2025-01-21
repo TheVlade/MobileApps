@@ -8,7 +8,7 @@
     </style>
 
     <style name="input_field_layout">
-        <item name="android:layout_height">65dp</item>
+        <item name="android:layout_height">78dp</item>
         <item name="android:layout_width">340dp</item>
         <item name="android:textColorHint">#9E9E9E</item>
     </style>
